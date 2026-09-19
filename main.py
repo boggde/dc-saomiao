@@ -101,11 +101,14 @@ def main():
 
         try:
 
-
+            print("[SCAN START]")
             tickers = (
                 client.get_tickers()
             )
-
+            print(
+                "[TICKERS]",
+                len(tickers)
+            )
 
 
             now_alerts = []
@@ -151,7 +154,10 @@ def main():
 
                 )
 
-
+               print(
+                  "[STORAGE OK]",
+                   symbol
+               )
 
                 history = storage.get(
                     symbol
@@ -166,7 +172,10 @@ def main():
                     history
 
                 )
-
+                print(
+                    "[ANALYZE OK]",
+                     symbol
+                )
 
 
                 if not result:
