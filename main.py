@@ -17,10 +17,7 @@ from detector import Detector
 
 from telegram import Telegram
 
-from web import (
-    start_web,
-    update_alerts
-)
+from web import update_alerts
 
 
 
@@ -68,10 +65,13 @@ def main():
 
 
 
-    start_web(
-        WEB_HOST,
-        WEB_PORT
-    )
+    # start_web(
+        # WEB_HOST,
+        # WEB_PORT
+    # )
+    # print(
+        #f"[WEB] http://{WEB_HOST}:{WEB_PORT}"
+    #)
     # 启动通知
 
     telegram.send(
@@ -92,13 +92,12 @@ def main():
        """
     )
 
-    print(
-        f"[WEB] http://{WEB_HOST}:{WEB_PORT}"
-    )
+    
 
 
     print(
-        "[RUNNING]"
+    "[RUNNING]",
+    flush=True
     )
 
 
