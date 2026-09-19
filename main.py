@@ -195,11 +195,7 @@ def main():
                 )
 
 
-                print(
-                    "[STORAGE OK]",
-                    symbol
-                )
-
+                
 
 
                 history = storage.get(
