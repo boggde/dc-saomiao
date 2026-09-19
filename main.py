@@ -17,7 +17,10 @@ from detector import Detector
 
 from telegram import Telegram
 
-from web import update_alerts
+from web import (
+    start_web,
+    update_alerts
+)
 
 
 
@@ -64,40 +67,27 @@ def main():
     telegram = Telegram()
 
 
+    # =============================
+    # Telegram启动测试
+    # =============================
 
-    # start_web(
-        # WEB_HOST,
-        # WEB_PORT
-    # )
-    # print(
-        #f"[WEB] http://{WEB_HOST}:{WEB_PORT}"
-    #)
-    # 启动通知
+    telegram.startup_test()
 
-    telegram.send(
-    f"""
-     🚀 Binance Anomaly Monitor V1 启动成功
 
-     交易所:
-      Binance Futures
 
-      合约:
-      {len(valid_symbols)} USDT 永续
-
-      状态:
-      RUNNING
-
-      时间:
-      {time.strftime('%Y-%m-%d %H:%M:%S')}
-       """
+    start_web(
+        WEB_HOST,
+        WEB_PORT
     )
-
-    
 
 
     print(
-    "[RUNNING]",
-    flush=True
+        f"[WEB] http://{WEB_HOST}:{WEB_PORT}"
+    )
+
+
+    print(
+        "[RUNNING]"
     )
 
 
@@ -107,27 +97,15 @@ def main():
 
 
     while True:
-        
-        print(
-        "[LOOP START]",
-        flush=True
-        )
-        print(
-        f"[HEARTBEAT] {time.strftime('%Y-%m-%d %H:%M:%S')} Scanner alive"
-        )
+
+
         try:
 
-            print(
-                 "[BINANCE] GET TICKERS",
-                 flush=True
-            )
+
             tickers = (
                 client.get_tickers()
             )
-            print(
-                f"[BINANCE] RECEIVED {len(tickers)}",
-                flush=True
-            )
+
 
 
             now_alerts = []
@@ -159,8 +137,9 @@ def main():
                 if not price or not volume_24h:
                     continue
 
-                # 成交额过滤通过后的有效币数量统计
+
                 active_symbols += 1
+
 
                 storage.add(
 
@@ -205,8 +184,6 @@ def main():
 
 
 
-                    # 检查冷却
-
                     if not detector.in_cooldown(
                         symbol
                     ):
@@ -228,8 +205,6 @@ def main():
 
 
 
-                        # 只有成功发送才冷却
-
                         if success:
 
                             detector.set_cooldown(
@@ -249,13 +224,13 @@ def main():
 
 
 
-            # 更新WEB
-
             update_alerts(
                 now_alerts
             )
 
+
             status = storage.status()
+
 
             print(
                 f"[SCAN OK] "
