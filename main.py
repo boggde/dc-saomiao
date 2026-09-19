@@ -26,19 +26,17 @@ from web import (
 
 def main():
 
-
     print(
         "Starting Binance Anomaly Monitor V1..."
     )
 
 
-
     client = BinanceClient()
 
 
-    # -----------------------------
+    # =============================
     # Health Check
-    # -----------------------------
+    # =============================
 
     if not client.health_check():
 
@@ -48,9 +46,16 @@ def main():
 
         return
 
+
     valid_symbols = (
         client.get_perpetual_symbols()
     )
+
+
+    print(
+        f"[SYMBOL FILTER] {len(valid_symbols)} USDT perpetual symbols"
+    )
+
 
     print(
         "[READY] Binance connection OK"
@@ -64,16 +69,34 @@ def main():
     detector = Detector()
 
 
+
+    # =============================
+    # Telegram
+    # =============================
+
     telegram = Telegram()
 
 
+    try:
+
+        telegram.startup_test()
+
+        print(
+            "[TELEGRAM OK]"
+        )
+
+    except Exception as e:
+
+        print(
+            "[TELEGRAM ERROR]",
+            e
+        )
+
+
+
     # =============================
-    # Telegram启动测试
+    # WEB
     # =============================
-
-    telegram.startup_test()
-
-
 
     start_web(
         WEB_HOST,
@@ -92,36 +115,52 @@ def main():
 
 
 
-    alerts_cache = {}
-
-
+    # =============================
+    # Scan Loop
+    # =============================
 
     while True:
 
 
         try:
 
-            print("[SCAN START]")
+
+            print(
+                "[SCAN START]"
+            )
+
+
             tickers = (
                 client.get_tickers()
             )
+
+
             print(
                 "[TICKERS]",
                 len(tickers)
             )
 
 
+
             now_alerts = []
+
             active_symbols = 0
 
+
+
             for item in tickers:
+
 
                 symbol = item.get(
                     "symbol"
                 )
 
+
                 if symbol not in valid_symbols:
+
                     continue
+
+
 
                 volume_24h = float(
                     item.get(
@@ -130,18 +169,26 @@ def main():
                     )
                 )
 
+
                 if volume_24h < MIN_24H_VOLUME:
+
                     continue
+
+
 
                 price = item.get(
                     "lastPrice"
                 )
 
-                if not price or not volume_24h:
+
+                if not price:
+
                     continue
 
 
+
                 active_symbols += 1
+
 
 
                 storage.add(
@@ -154,10 +201,13 @@ def main():
 
                 )
 
-               print(
-                  "[STORAGE OK]",
-                   symbol
-               )
+
+                print(
+                    "[STORAGE OK]",
+                    symbol
+                )
+
+
 
                 history = storage.get(
                     symbol
@@ -172,10 +222,13 @@ def main():
                     history
 
                 )
+
+
                 print(
                     "[ANALYZE OK]",
-                     symbol
+                    symbol
                 )
+
 
 
                 if not result:
@@ -216,9 +269,11 @@ def main():
 
                         if success:
 
+
                             detector.set_cooldown(
                                 symbol
                             )
+
 
                             print(
                                 f"[ALERT SENT] {symbol}"
@@ -226,6 +281,7 @@ def main():
 
 
                         else:
+
 
                             print(
                                 f"[ALERT FAILED] {symbol}"
@@ -238,7 +294,9 @@ def main():
             )
 
 
+
             status = storage.status()
+
 
 
             print(
