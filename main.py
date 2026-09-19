@@ -108,17 +108,27 @@ def main():
 
 
     while True:
-
+        
+        print(
+        "[LOOP START]",
+        flush=True
+        )
         print(
         f"[HEARTBEAT] {time.strftime('%Y-%m-%d %H:%M:%S')} Scanner alive"
         )
         try:
 
-
+            print(
+                 "[BINANCE] GET TICKERS",
+                 flush=True
+            )
             tickers = (
                 client.get_tickers()
             )
-
+            print(
+                f"[BINANCE] RECEIVED {len(tickers)}",
+                flush=True
+            )
 
 
             now_alerts = []
