@@ -19,22 +19,36 @@ class Telegram:
 
         self.enabled = TELEGRAM_ENABLED
 
-        self.session = requests.Session()
-
-        self.session.trust_env = False
 
 
+    # ======================================
+    # 发送消息
+    # ======================================
 
-    def send(self,text):
+    def send(
+        self,
+        text
+    ):
+
 
         if not self.enabled:
-            print("[TELEGRAM DISABLED]")
+
+            print(
+                "[TELEGRAM DISABLED]"
+            )
+
             return True
 
 
+
         if not TELEGRAM_BOT_TOKEN:
-            print("[TELEGRAM ERROR] Missing token")
+
+            print(
+                "[TELEGRAM ERROR] Missing token"
+            )
+
             return False
+
 
 
         url = (
@@ -46,21 +60,26 @@ class Telegram:
         )
 
 
+
         payload = {
 
-            "chat_id": TELEGRAM_CHAT_ID,
+            "chat_id":
+                TELEGRAM_CHAT_ID,
 
-            "text": text
+            "text":
+                text
         }
+
 
 
         for attempt in range(
             len(RETRY_SEQUENCE)+1
         ):
 
+
             try:
 
-                response = self.session.post(
+                response = requests.post(
                     url,
                     json=payload,
                     timeout=REQUEST_TIMEOUT
@@ -70,17 +89,21 @@ class Telegram:
                 response.raise_for_status()
 
 
-                print("[TELEGRAM OK]")
+
+                print(
+                    "[TELEGRAM OK]"
+                )
 
                 return True
 
 
+
             except Exception as e:
+
 
                 print(
                     f"[TELEGRAM ERROR] {e}"
                 )
-
 
 
 
@@ -101,6 +124,26 @@ class Telegram:
 
 
         return False
+
+
+
+    # ======================================
+    # 启动测试通知
+    # ======================================
+
+    def startup_test(self):
+
+        text = """
+🚀 Binance Anomaly Monitor
+
+状态:
+✅ 程序启动成功
+✅ Telegram连接正常
+"""
+
+        return self.send(
+            text
+        )
 
 
 
