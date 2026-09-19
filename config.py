@@ -19,55 +19,34 @@ BINANCE_BASE_URL = os.getenv(
 # Scanner
 # =====================================================
 
-# 扫描间隔 秒
-SCAN_INTERVAL = int(
-    os.getenv(
-        "SCAN_INTERVAL",
-        "5"
-    )
-)
+# 每5秒扫描一次
+SCAN_INTERVAL = 5
 
 
 # 保存历史时间
+# 最近1小时
 HISTORY_SECONDS = 3600
 
 
-# =====================================================
+# ===============================
 # Market Filter
-# =====================================================
+# ===============================
 
-# 最低24小时成交额 USDT
+# 最低24小时成交额 (USDT)
 
-MIN_24H_VOLUME = int(
-    os.getenv(
-        "MIN_24H_VOLUME",
-        "5000000"
-    )
-)
+MIN_24H_VOLUME = 5_000_000
 
 
 # =====================================================
 # Signal
 # =====================================================
 
-# 1小时振幅阈值 %
-
-RANGE_THRESHOLD = float(
-    os.getenv(
-        "RANGE_THRESHOLD",
-        "10"
-    )
-)
+# 1小时振幅阈值
+RANGE_THRESHOLD = 10
 
 
 # Telegram冷却时间
-
-ALERT_COOLDOWN_SECONDS = int(
-    os.getenv(
-        "ALERT_COOLDOWN_SECONDS",
-        "3600"
-    )
-)
+ALERT_COOLDOWN_SECONDS = 3600
 
 
 # =====================================================
@@ -81,12 +60,9 @@ RETRY_SEQUENCE = [
 ]
 
 
-REQUEST_TIMEOUT = int(
-    os.getenv(
-        "REQUEST_TIMEOUT",
-        "10"
-    )
-)
+# HTTP timeout
+
+REQUEST_TIMEOUT = 10
 
 
 # =====================================================
@@ -96,6 +72,7 @@ REQUEST_TIMEOUT = int(
 MAX_WEIGHT_PER_MINUTE = 1920
 
 
+# 遇到这些直接退出
 FATAL_STATUS_CODES = [
     418,
     429
@@ -131,11 +108,9 @@ TELEGRAM_CHAT_ID = os.getenv(
 # Web
 # =====================================================
 
-# Docker必须监听0.0.0.0
-
 WEB_HOST = os.getenv(
     "WEB_HOST",
-    "0.0.0.0"
+    "127.0.0.1"
 )
 
 
@@ -150,8 +125,3 @@ WEB_PORT = int(
 # =====================================================
 # Storage
 # =====================================================
-
-DATA_PATH = os.getenv(
-    "DATA_PATH",
-    "/app/data"
-)
