@@ -91,7 +91,9 @@ def main():
 
     while True:
 
-
+        print(
+        f"[HEARTBEAT] {time.strftime('%Y-%m-%d %H:%M:%S')} Scanner alive"
+        )
         try:
 
 
