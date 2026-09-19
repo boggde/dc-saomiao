@@ -17,14 +17,10 @@ class BinanceClient:
 
         self.session.headers.update(
             {
-                "User-Agent": "AnomalyMonitor-V1"
+                "User-Agent":
+                "AnomalyMonitor-V1"
             }
         )
-
-        # ===============================
-        # 强制关闭系统代理
-        # ===============================
-        self.session.trust_env = False
 
 
     # ============================================
@@ -37,19 +33,32 @@ class BinanceClient:
             "/fapi/v1/exchangeInfo"
         )
 
+
         symbols = set()
+
 
         for item in data.get(
             "symbols",
             []
         ):
 
+
             if (
-                item.get("contractType") == "PERPETUAL"
+                item.get("contractType")
+                ==
+                "PERPETUAL"
+
                 and
-                item.get("quoteAsset") == "USDT"
+
+                item.get("quoteAsset")
+                ==
+                "USDT"
+
                 and
-                item.get("status") == "TRADING"
+
+                item.get("status")
+                ==
+                "TRADING"
             ):
 
                 symbols.add(
@@ -95,6 +104,8 @@ class BinanceClient:
                 )
 
 
+                # Binance限制
+
                 if response.status_code in FATAL_STATUS_CODES:
 
                     print(
@@ -104,6 +115,7 @@ class BinanceClient:
                     raise SystemExit(
                         "Binance rate limit protection triggered"
                     )
+
 
 
                 response.raise_for_status()
@@ -117,8 +129,7 @@ class BinanceClient:
 
 
                 print(
-                    f"[REQUEST ERROR] {endpoint}: "
-                    f"{type(e).__name__}: {e}"
+                    f"[REQUEST ERROR] {endpoint}: {type(e).__name__}: {e}"
                 )
 
 
