@@ -72,7 +72,25 @@ def main():
         WEB_HOST,
         WEB_PORT
     )
+    # 启动通知
 
+    telegram.send(
+    f"""
+     🚀 Binance Anomaly Monitor V1 启动成功
+
+     交易所:
+      Binance Futures
+
+      合约:
+      {len(valid_symbols)} USDT 永续
+
+      状态:
+      RUNNING
+
+      时间:
+      {time.strftime('%Y-%m-%d %H:%M:%S')}
+       """
+    )
 
     print(
         f"[WEB] http://{WEB_HOST}:{WEB_PORT}"
