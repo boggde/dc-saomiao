@@ -125,20 +125,13 @@ def main():
         try:
 
 
-            print(
-                "[SCAN START]"
-            )
-
+            
 
             tickers = (
                 client.get_tickers()
             )
 
 
-            print(
-                "[TICKERS]",
-                len(tickers)
-            )
 
 
 
@@ -224,10 +217,7 @@ def main():
                 )
 
 
-                print(
-                    "[ANALYZE OK]",
-                    symbol
-                )
+                
 
 
 
